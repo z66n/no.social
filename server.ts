@@ -254,11 +254,19 @@ Deno.serve(
               .admin-btn { background: #f0f0f0; border: 1px solid #ccc; font-size: 0.8rem; margin-left: 0.5rem; }
               .admin-btn:hover { background: #e0e0e0; }
               .delete-btn { color: red; border-color: red; background: white; }
+              .handle-box { background: #f9f9f9; padding: 1rem; border-radius: 8px; text-align: center; margin: 1.5rem 0; border: 1px dashed #ccc; }
             </style>
           </head>
           <body>
             <h1>no.social</h1>
             <p><i>A minimal serverless ActivityPub publisher.</i></p>
+
+            <div class="handle-box">
+              <p>Follow me on the Fediverse:</p>
+              <p style="font-size: 1.2rem; font-weight: bold; margin: 0.5rem 0;">
+                @${CONFIG.username}@${url.hostname}
+              </p>
+            </div>
             
             <h2>Followers (${followers.length})</h2>
             <ul>

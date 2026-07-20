@@ -68,7 +68,7 @@ async function saveActivity(activity: Create, note: Note) {
 
 const federation = createFederation({
   kv: new DenoKvStore(kv),
-  queue: new DenoKvMessageQueue(kv),
+  // queue: new DenoKvMessageQueue(kv),
 });
 
 federation

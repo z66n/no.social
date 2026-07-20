@@ -8,7 +8,7 @@
     "@logtape/logtape": "jsr:@logtape/logtape@^2.2.4"
   },
   "deploy": {
-    "org": "z66n",
+    "org": "st6",
     "project": "no-social",
     "entrypoint": "server.ts",
     "app": "no-social"

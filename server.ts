@@ -455,6 +455,10 @@ Deno.serve(
     }
 
     if (url.pathname === "/clear-kv") {
+      if (!CONFIG.apiToken || request.headers.get("Authorization") !== `Bearer ${CONFIG.apiToken}`) {
+        return new Response("Unauthorized", { status: 401 });
+      }
+
       for await (const entry of kv.list({ prefix: ["activities"] })) {
         await kv.delete(entry.key);
       }

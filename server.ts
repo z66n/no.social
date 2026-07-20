@@ -246,13 +246,24 @@ Deno.serve(
             <title>no.social</title>
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <style>
-              body { font-family: system-ui, sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+              body { 
+                font-family: system-ui, -apple-system, sans-serif; 
+                max-width: 640px; margin: 0 auto; padding: 2rem 1.5rem; 
+                color: #1f2937; line-height: 1.6; background-color: #ffffff;
+              }
+              h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: -0.025em; }
+              h2 { font-size: 1.25rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem; color: #111827; }
+              p { margin: 0 0 1rem 0; }
+              hr { border: 0; border-top: 1px solid #e5e7eb; margin: 2rem 0; }
               .note { border-bottom: 1px solid #eee; padding: 1rem 0; }
               .note-meta { font-size: 0.8rem; color: #666; margin-bottom: 0.5rem; }
-              button { cursor: pointer; padding: 0.5rem 1rem; }
-              .admin-btn { background: #f0f0f0; border: 1px solid #ccc; font-size: 0.8rem; margin-left: 0.5rem; }
+              button { 
+                cursor: pointer; padding: 0.5rem 1rem; border: none; padding: 0.6rem 1.2rem;
+                border-radius: 6px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: background 0.2s;
+              }
+              .admin-btn { background: #f0f0f0; color: #333; }
               .admin-btn:hover { background: #e0e0e0; }
-              .delete-btn { color: red; border-color: red; background: white; }
+              .delete-btn { color: red; font-size: 0.80rem; margin-left: 1rem; }
               .handle-box {
                 background: #f9f9f9;
                 padding: 1.25rem;
@@ -276,10 +287,7 @@ Deno.serve(
               .handle-box .display-name { font-size: 1.15rem; font-weight: 700; color: #222; margin: 0 0 0.15rem 0; line-height: 1.2; }
               .handle-box .actor-handle { font-size: 0.9rem; color: #666; margin: 0 0 0.6rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
               .handle-box .actor-summary { font-size: 0.9rem; color: #444; line-height: 1.45; margin: 0 0 0.75rem 0; }
-              .follow-btn {
-                background: #6364ff; color: white; border: none; padding: 0.6rem 1.2rem;
-                border-radius: 6px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: background 0.2s;
-              }
+              .follow-btn { background: #6364ff; color: white; }
               .follow-btn:hover { background: #5657e6; }
               .modal {
                 display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -345,7 +353,7 @@ Deno.serve(
 
             <hr>
             
-            <button onclick="promptPost()">+ Post New Note</button>
+            <button class="admin-btn" onclick="promptPost()">+ Post New Note</button>
             
             <h2>Recent Notes</h2>
             ${notes.length === 0 ? '<p>No notes yet.</p>' : ''}
@@ -353,7 +361,7 @@ Deno.serve(
               <div class="note">
                 <div class="note-meta">
                   ${new Date(note.published).toLocaleString()}
-                  <button class="admin-btn delete-btn" onclick="promptDelete('${note.id}')">Delete</button>
+                  <a href="#" class="delete-btn" onclick="promptDelete('${note.id}'); return false;"><i>Delete</i></a>
                 </div>
                 <div>${note.content}</div>
               </div>

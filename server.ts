@@ -1,7 +1,7 @@
 import { createFederation, exportJwk, generateCryptoKeyPair, importJwk } from "@fedify/fedify";
 import { configure, getConsoleSink } from "@logtape/logtape";
 import { Accept, Follow, Person, Image, Create, Note, Delete, Undo } from "@fedify/vocab";  
-import { DenoKvStore, DenoKvMessageQueue, } from "@fedify/denokv";
+import { DenoKvStore } from "@fedify/denokv";
 import { behindProxy } from "@hongminhee/x-forwarded-fetch";
 
 const CONFIG = {
@@ -68,7 +68,6 @@ async function saveActivity(activity: Create, note: Note) {
 
 const federation = createFederation({
   kv: new DenoKvStore(kv),
-  // queue: new DenoKvMessageQueue(kv),
 });
 
 federation
@@ -254,7 +253,56 @@ Deno.serve(
               .admin-btn { background: #f0f0f0; border: 1px solid #ccc; font-size: 0.8rem; margin-left: 0.5rem; }
               .admin-btn:hover { background: #e0e0e0; }
               .delete-btn { color: red; border-color: red; background: white; }
-              .handle-box { background: #f9f9f9; padding: 1rem; border-radius: 8px; text-align: center; margin: 1.5rem 0; border: 1px dashed #ccc; }
+              .handle-box {
+                background: #f9f9f9;
+                padding: 1.25rem;
+                border-radius: 12px;
+                margin: 1.5rem 0;
+                border: 1px dashed #ccc;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+                text-align: left;
+              }
+              .handle-box .avatar {
+                width: 72px;
+                height: 72px;
+                border-radius: 50%;
+                object-fit: cover;
+                flex-shrink: 0;
+                background: #e0e0e0;
+              }
+              .handle-box .actor-info { flex: 1; min-width: 0; }
+              .handle-box .display-name { font-size: 1.15rem; font-weight: 700; color: #222; margin: 0 0 0.15rem 0; line-height: 1.2; }
+              .handle-box .actor-handle { font-size: 0.9rem; color: #666; margin: 0 0 0.6rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+              .handle-box .actor-summary { font-size: 0.9rem; color: #444; line-height: 1.45; margin: 0 0 0.75rem 0; }
+              .follow-btn {
+                background: #6364ff; color: white; border: none; padding: 0.6rem 1.2rem;
+                border-radius: 6px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: background 0.2s;
+              }
+              .follow-btn:hover { background: #5657e6; }
+              .modal {
+                display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+                background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000;
+              }
+              .modal-content {
+                background: white; padding: 2rem; border-radius: 12px; max-width: 400px; width: 90%;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+              }
+              .modal-content h3 { margin: 0 0 1rem 0; font-size: 1.2rem; }
+              .modal-content p { margin: 0 0 1rem 0; color: #666; font-size: 0.9rem; }
+              .modal-content input {
+                width: 100%; padding: 0.6rem; border: 1px solid #ddd; border-radius: 6px;
+                font-size: 1rem; margin-bottom: 1rem; box-sizing: border-box;
+              }
+              .modal-content input:focus { outline: none; border-color: #6364ff; }
+              .modal-buttons { display: flex; gap: 0.5rem; justify-content: flex-end; }
+              .modal-buttons button { padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.9rem; cursor: pointer; }
+              .modal-cancel { background: #f0f0f0; border: 1px solid #ddd; }
+              .modal-confirm { background: #6364ff; color: white; border: none; }
+              @media (max-width: 420px) {
+                .handle-box { flex-direction: column; align-items: center; text-align: center; }
+              }
             </style>
           </head>
           <body>
@@ -262,10 +310,28 @@ Deno.serve(
             <p><i>A minimal serverless ActivityPub publisher.</i></p>
 
             <div class="handle-box">
-              <p>Follow me on the Fediverse:</p>
-              <p style="font-size: 1.2rem; font-weight: bold; margin: 0.5rem 0;">
-                @${CONFIG.username}@${url.hostname}
-              </p>
+              <img class="avatar"
+                  src="${CONFIG.avatarUrl}"
+                  alt="${CONFIG.displayName}"
+                  onerror="this.style.display='none'" />
+              <div class="actor-info">
+                <p class="display-name">${CONFIG.displayName}</p>
+                <p class="actor-handle">@${CONFIG.username}@${url.hostname}</p>
+                <p class="actor-summary">${CONFIG.summary}</p>
+                <button class="follow-btn" onclick="openFollowModal()">Follow</button>
+              </div>
+            </div>
+
+            <div id="followModal" class="modal">
+              <div class="modal-content">
+                <h3>Follow on Mastodon</h3>
+                <p>Enter your instance address to follow:</p>
+                <input type="text" id="instanceInput" placeholder="mastodon.social" />
+                <div class="modal-buttons">
+                  <button class="modal-cancel" onclick="closeFollowModal()">Cancel</button>
+                  <button class="modal-confirm" onclick="followFromModal()">Continue</button>
+                </div>
+              </div>
             </div>
             
             <h2>Followers (${followers.length})</h2>
@@ -294,6 +360,8 @@ Deno.serve(
             `).join("")}
 
             <script>
+              const ACTOR_URL = "https://${url.hostname}/users/${CONFIG.username}";
+
               async function promptPost() {
                 const token = prompt("Enter AP_API_TOKEN to post:");
                 if (!token) return;
@@ -336,6 +404,38 @@ Deno.serve(
                   alert("Failed: " + res.statusText);
                 }
               }
+
+              function openFollowModal() {
+                document.getElementById('followModal').style.display = 'flex';
+                document.getElementById('instanceInput').focus();
+              }
+
+              function closeFollowModal() {
+                document.getElementById('followModal').style.display = 'none';
+                document.getElementById('instanceInput').value = '';
+              }
+
+              function followFromModal() {
+                let instance = document.getElementById('instanceInput').value.trim();
+                if (!instance) return;
+                
+                instance = instance.replace(/^https?:\\/\\//, '').replace(/\\/$/, '');
+                
+                window.open(\`https://\${instance}/authorize_interaction?uri=\${encodeURIComponent(ACTOR_URL)}\`, '_blank');
+                closeFollowModal();
+              }
+
+              document.getElementById('instanceInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                  followFromModal();
+                }
+              });
+
+              document.getElementById('followModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                  closeFollowModal();
+                }
+              });
             </script>
           </body>
         </html>

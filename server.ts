@@ -156,52 +156,67 @@ federation
     console.log(`[Unfollow] Removed follower: ${undo.actorId.href}`);
   });
 
-federation.setOutboxDispatcher(
-  "/users/{identifier}/outbox",
-  async (ctx, identifier) => {
-    if (identifier !== CONFIG.username) return null;
-    const items: Create[] = [];
-    for await (const entry of kv.list<{ id: string; actor: string; object: string }>({
-      prefix: ["activities"],
-    })) {
-      const value = entry.value;
-      const note = await getNote(value.object);
-      if (note == null) continue;
-      items.push(
-        new Create({
-          id: new URL(value.id),
-          actor: new URL(value.actor),
-          object: note,
-        }),
+federation
+  .setOutboxDispatcher(
+    "/users/{identifier}/outbox",
+    async (ctx, identifier, cursor) => {
+      if (identifier !== CONFIG.username) return null;
+      if (cursor == null) return null;
+      const limit = 20;
+      const kvCursor = cursor === "start" ? undefined : cursor;
+      const iter = kv.list<{ id: string; actor: string; object: string }>(
+        { prefix: ["activities"] },
+        { cursor: kvCursor, limit }
       );
+      const items: Create[] = [];
+      let nextCursor: string | undefined = undefined;
+      for await (const entry of iter) {
+        const value = entry.value;
+        const note = await getNote(value.object);
+        if (note != null) {
+          items.push(
+            new Create({
+              id: new URL(value.id),
+              actor: new URL(value.actor),
+              object: note,
+            }),
+          );
+        }
+        nextCursor = iter.cursor ?? undefined;
+      }
+      return { items, nextCursor };
     }
-    return {
-      items,
-    };
-  },
-);
+  )
+  .setFirstCursor(async () => "start");
 
-federation.setFollowersDispatcher(
-  "/users/{identifier}/followers",
-  async (ctx, identifier, cursor) => {
-    if (identifier !== CONFIG.username) return null;
-    const followers: { id: URL; inboxId: URL | null; username: string; url: URL | null }[] = [];
-    for await (const entry of kv.list<{ id: string; inboxId: string; url: string; username: string }>({
-      prefix: ["followers"],
-    })) {
-      const value = entry.value;
-      followers.push({
-        id: new URL(value.id),
-        inboxId: value.inboxId ? new URL(value.inboxId) : null,
-        username: value.username,
-        url: value.url ? new URL(value.url) : null,
-      });
+federation
+  .setFollowersDispatcher(
+    "/users/{identifier}/followers",
+    async (ctx, identifier, cursor) => {
+      if (identifier !== CONFIG.username) return null;
+      if (cursor == null) return null;
+      const limit = 50;
+      const kvCursor = cursor === "start" ? undefined : cursor;
+      const iter = kv.list<{ id: string; inboxId?: string; url?: string; username?: string }>(
+        { prefix: ["followers"] },
+        { cursor: kvCursor, limit }
+      );
+      const items: { id: URL; inboxId: URL | null; username: string; url: URL | null }[] = [];
+      let nextCursor: string | undefined = undefined;
+      for await (const entry of iter) {
+        const value = entry.value;
+        items.push({
+          id: new URL(value.id),
+          inboxId: value.inboxId ? new URL(value.inboxId) : null,
+          username: value.username || "Unknown",
+          url: value.url ? new URL(value.url) : null,
+        });
+        nextCursor = iter.cursor ?? undefined;
+      }
+      return { items, nextCursor };
     }
-    return {
-      items: followers,
-    };
-  },
-);
+  )
+  .setFirstCursor(async () => "start");
 
 federation.setObjectDispatcher(
   Note,

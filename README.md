@@ -4,14 +4,14 @@ A minimal serverless ActivityPub publisher built with Deno.
 
 ## Overview
 
-no.social is a lightweight ActivityPub server that lets you publish notes and manage followers on the federated social web. It provides a simple web interface for posting content and automatically handles ActivityPub protocol interactions.
+no.social is a lightweight ActivityPub server that lets you publish notes to followers on the federated social web. It provides a simple web interface for managing content and supports basic ActivityPub protocol interactions.
 
 ## Features
 
 - 📝 **Publish Notes** - Create and share text notes with followers
-- 👥 **Follower Management** - Accept follow requests and manage your followers
+- 👥 **Follower Interactions** - Handle follow and unfollow requests, and deliver notes to followers' inboxes
 - 🔑 **Cryptographic Keys** - Automatic RSA key pair generation and management
-- 🌐 **ActivityPub Federation** - Full ActivityPub protocol support via Fedify
+- 🌐 **ActivityPub Federation** - ActivityPub protocol support via Fedify for discovery, follow/unfollow, inbox delivery, and delete activities
 - 💾 **Persistent Storage** - Deno KV database for notes, activities, and followers
 - 🎨 **Web Interface** - Simple HTML dashboard for content management
 

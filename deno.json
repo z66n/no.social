@@ -1,0 +1,16 @@
+{
+  "unstable": ["kv"],
+  "imports": {
+    "@fedify/denokv": "jsr:@fedify/denokv@^2.3.2",
+    "@fedify/fedify": "jsr:@fedify/fedify@^2.3.2",
+    "@fedify/vocab": "jsr:@fedify/vocab@^2.3.2",
+    "@hongminhee/x-forwarded-fetch": "jsr:@hongminhee/x-forwarded-fetch@^0.2.0",
+    "@logtape/logtape": "jsr:@logtape/logtape@^2.2.4"
+  },
+  "deploy": {
+    "org": "z66n",
+    "project": "no-social",
+    "entrypoint": "server.ts",
+    "app": "no-social"
+  }
+}

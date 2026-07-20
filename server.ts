@@ -347,7 +347,7 @@ Deno.serve(
 
             <div id="followModal" class="modal">
               <div class="modal-content">
-                <h3>Follow on Mastodon</h3>
+                <h3>Follow on the Fediverse</h3>
                 <p>Enter your instance address to follow:</p>
                 <input type="text" id="instanceInput" placeholder="mastodon.social" />
                 <div class="modal-buttons">

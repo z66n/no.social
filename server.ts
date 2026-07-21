@@ -226,7 +226,13 @@ federation.setObjectDispatcher(
   },
 );
 
+const port = Number(Deno.env.get("PORT") ?? 8000);
+
 Deno.serve(
+  { 
+    port, 
+    hostname: "0.0.0.0" // 推荐显式指定，确保在 Docker 容器内可被外部访问
+  },
   behindProxy(async (request) => {
     const ctx = federation.createContext(request, undefined);
     const followersUri = ctx.getFollowersUri(CONFIG.username);

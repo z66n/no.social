@@ -7,7 +7,7 @@ COPY server.ts ./
 
 RUN deno cache --unstable-kv server.ts
 
-FROM denoland/deno:2
+FROM denoland/deno:2.9.3
 
 WORKDIR /app
 

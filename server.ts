@@ -269,7 +269,7 @@ Deno.serve(
             <style>
               body { 
                 font-family: system-ui, -apple-system, sans-serif; 
-                max-width: 640px; margin: 0 auto; padding: 2rem 1.5rem; 
+                max-width: 440px; margin: 0 auto; padding: 2rem 1.5rem; 
                 color: #1f2937; line-height: 1.6; background-color: #ffffff;
               }
               h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: -0.025em; }
@@ -292,7 +292,7 @@ Deno.serve(
                 margin: 1.5rem 0;
                 border: 1px dashed #ccc;
                 display: flex;
-                align-items: center;
+                align-items: flex-start;
                 gap: 1rem;
                 text-align: left;
               }
@@ -305,9 +305,9 @@ Deno.serve(
                 background: #e0e0e0;
               }
               .handle-box .actor-info { flex: 1; min-width: 0; }
-              .handle-box .display-name { font-size: 1.15rem; font-weight: 700; color: #222; margin: 0 0 0.15rem 0; line-height: 1.2; }
-              .handle-box .actor-handle { font-size: 0.9rem; color: #666; margin: 0 0 0.6rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-              .handle-box .actor-summary { font-size: 0.9rem; color: #444; line-height: 1.45; margin: 0 0 0.75rem 0; }
+              .handle-box .display-name { font-size: 1.15rem; font-weight: 700; color: #222; margin: 0 0 0.25rem 0; line-height: 1; }
+              .handle-box .actor-handle { font-size: 0.9rem; color: #666; margin: 0 0 0.9rem 0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; line-height: 1; }
+              .handle-box .actor-summary { font-size: 0.9rem; color: #444; line-height: 1.45; margin: 0 0 0 0; }
               .follow-btn { background: #6364ff; color: white; }
               .follow-btn:hover { background: #5657e6; }
               .modal {
@@ -346,9 +346,9 @@ Deno.serve(
               <div class="actor-info">
                 <p class="display-name">${CONFIG.displayName}</p>
                 <p class="actor-handle">@${CONFIG.username}@${url.hostname}</p>
-                <p class="actor-summary">${CONFIG.summary}</p>
-                <button class="follow-btn" onclick="openFollowModal()">Follow</button>
+                <p class="actor-summary">${CONFIG.summary}</p>                
               </div>
+              <button class="follow-btn" onclick="openFollowModal()">Follow</button>
             </div>
 
             <div id="followModal" class="modal">

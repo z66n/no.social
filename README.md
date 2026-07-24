@@ -1,7 +1,8 @@
 # no.social
 
 [![License](https://img.shields.io/github/license/z66n/no.social)](./LICENSE)
-[![Deno Deploy](https://img.shields.io/badge/Deno-Deploy-002633?logo=denodeploy)](#deployment)
+[![Deno Deploy](https://img.shields.io/badge/Deno_Deploy-002633?logo=denodeploy)](#deno-deploy)
+[![Render](https://img.shields.io/badge/Render-000000?logo=render)](#render)
 
 A minimal serverless ActivityPub publisher built with Deno.
 

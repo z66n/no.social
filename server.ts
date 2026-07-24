@@ -269,7 +269,7 @@ Deno.serve(
             <style>
               body { 
                 font-family: system-ui, -apple-system, sans-serif; 
-                max-width: 440px; margin: 0 auto; padding: 2rem 1.5rem; 
+                max-width: 480px; margin: 0 auto; padding: 2rem 1.5rem; 
                 color: #1f2937; line-height: 1.6; background-color: #ffffff;
               }
               h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: -0.025em; }

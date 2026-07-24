@@ -1,0 +1,23 @@
+# Exported from Render on 2026-07-24T19:28:33Z
+version: "1"
+services:
+- type: web
+  name: no.social
+  runtime: docker
+  repo: https://github.com/z66n/no.social
+  plan: free
+  envVars:
+  - key: AP_AVATAR_URL
+    sync: false
+  - key: AP_API_TOKEN
+    sync: false
+  - key: AP_SUMMARY
+    sync: false
+  - key: AP_DISPLAY_NAME
+    sync: false
+  - key: AP_USERNAME
+    sync: false
+  region: ohio
+  dockerContext: .
+  dockerfilePath: ./Dockerfile
+  autoDeployTrigger: commit

@@ -1,5 +1,8 @@
 # no.social
 
+[![License](https://img.shields.io/github/license/z66n/no.social)](./LICENSE)
+[![Deno Deploy](https://img.shields.io/badge/Deno-Deploy-002633?logo=denodeploy)](#deployment)
+
 A minimal serverless ActivityPub publisher built with Deno.
 
 ## Overview
@@ -29,7 +32,7 @@ Configure the following environment variables:
 
 ### Prerequisites
 
-- [Deno](https://deno.land) v1.40 or later
+- [Deno](https://deno.land) v2.9.3 or later
 
 ### Installation
 
@@ -61,13 +64,21 @@ The server will start on `http://localhost:8000`
 
 ## Deployment
 
-This project is configured for [Deno Deploy](https://deno.com/deploy):
+### Deno Deploy
 
-```bash
-deno deploy --project no-social
-```
+[![Deploy on Deno](https://deno.com/button)](https://console.deno.com/new?clone=https://github.com/z66n/no.social)
 
-Update the deployment configuration in `deno.json` as needed.
+1. Click the button to create the app.
+2. Set the required [environment variables](#environment-variables).
+3. Set the entrypoint to `server.ts`.
+4. Create and attach a Deno KV database.
+5. Deploy.
+
+### Render
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/z66n/no.social)
+
+> **Note:** The Render free tier does not provide persistent storage, so follower and note data are lost after spin-downs and redeploys.
 
 ## Technologies
 

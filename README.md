@@ -16,6 +16,7 @@ no.social is a lightweight ActivityPub server that lets you publish notes to fol
 - 👥 **Follower Interactions** - Handle follow and unfollow requests, and deliver notes to followers' inboxes
 - 🔑 **Cryptographic Keys** - Automatic RSA key pair generation and management
 - 🌐 **ActivityPub Federation** - ActivityPub protocol support via Fedify for discovery, follow/unfollow, inbox delivery, and delete activities
+- 🔗 **Custom Handle Host** - Use a separate domain for your ActivityPub handle while hosting the actor and activities elsewhere
 - 💾 **Persistent Storage** - Deno KV database for notes, activities, and followers
 - 🎨 **Web Interface** - Simple HTML dashboard for content management
 
@@ -28,6 +29,8 @@ Configure the following environment variables:
 - `AP_SUMMARY` - Profile bio/summary text
 - `AP_AVATAR_URL` - Avatar image URL
 - `AP_API_TOKEN` - Token required for publishing notes and deleting content
+- `AP_HANDLE_HOST` - Domain used for your ActivityPub handle (e.g. `your-handle-host.com`)
+- `AP_WEB_ORIGIN` - Public origin where your ActivityPub actor and activities are hosted (e.g. `https://your-server.example.com`)
 
 ## Getting Started
 

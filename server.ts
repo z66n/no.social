@@ -10,6 +10,8 @@ const CONFIG = {
   summary: Deno.env.get("AP_SUMMARY")?.trim() || "Powered by no.social - A minimal serverless ActivityPub publisher.",
   apiToken: Deno.env.get("AP_API_TOKEN")?.trim() || "",
   avatarUrl: Deno.env.get("AP_AVATAR_URL")?.trim() || "https://api.dicebear.com/9.x/identicon/png?seed=Tom&scale=80",
+  handleHost: Deno.env.get("AP_HANDLE_HOST")?.trim() || "",
+  webOrigin: Deno.env.get("AP_WEB_ORIGIN")?.trim() || "",
 };
 
 await configure({
@@ -68,6 +70,10 @@ async function saveActivity(activity: Create, note: Note) {
 
 const federation = createFederation({
   kv: new DenoKvStore(kv),
+  origin: {
+    handleHost: CONFIG.handleHost,
+    webOrigin: CONFIG.webOrigin,
+  },
 });
 
 federation

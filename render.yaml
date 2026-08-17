@@ -17,6 +17,10 @@ services:
     sync: false
   - key: AP_USERNAME
     sync: false
+  - key: AP_HANDLE_HOST
+    sync: false
+  - key: AP_WEB_ORIGIN
+    sync: false
   region: ohio
   dockerContext: .
   dockerfilePath: ./Dockerfile
